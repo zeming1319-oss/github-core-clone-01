@@ -1,0 +1,100 @@
+FAIL git.advertise-v2 :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.advertise-receive-pack :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.advertise-headers :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.unknown-repo-404 :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.ls-refs :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.ls-refs-prefix :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.clone-empty :: invalid pkt-line length "vers" [pktline-header]
+FAIL git.push-first-commit :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.clone-object-hashes :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.clone-blob-bytes :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.clone-tree-entries :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.clone-commit-bytes :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.clone-annotated-tag :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.fetch-incremental :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.fetch-nothing-new :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.fetch-shallow-depth1 :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.fetch-shallow-deepen :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.fetch-shallow-new-tip :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.push-update-ref :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.push-create-branch :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.push-delete-branch :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.push-non-fast-forward :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.push-mixed-report :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.push-delete-tag :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.push-100-files :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.pack-integrity :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.pack-deltas :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.sideband-framing :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.push-sideband-report :: invalid pkt-line length "# se" [pktline-header]
+FAIL git.repo-survives-errors :: invalid pkt-line length "# se" [pktline-header]
+FAIL repos.create :: POST /api/v3/user/repos (amber-thistle-repos-create): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL repos.patch :: POST /api/v3/user/repos (amber-thistle-repos-patch): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL repos.branches :: POST /api/v3/user/repos (amber-thistle-repos-branches): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL repos.commits :: POST /api/v3/user/repos (amber-thistle-repos-commits): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL repos.unauthorized :: POST /api/v3/user/repos (amber-thistle-repos-unauthorized): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL repos.foreign-token :: POST /api/v3/user/repos (amber-thistle-repos-foreign): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL repos.contents-create :: POST /api/v3/user/repos (amber-thistle-repos-contents-create): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL repos.contents-directory :: POST /api/v3/user/repos (amber-thistle-repos-contents-dir): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL repos.contents-stale-sha :: POST /api/v3/user/repos (amber-thistle-repos-contents-stale): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL repos.contents-delete :: POST /api/v3/user/repos (amber-thistle-repos-contents-delete): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL issues.create :: POST /api/v3/user/repos (amber-thistle-issues-create): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL issues.create-title-body :: POST /api/v3/user/repos (amber-thistle-issues-create-echo): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL issues.create-labels :: POST /api/v3/user/repos (amber-thistle-issues-create-labels): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL issues.numbers-increment :: POST /api/v3/user/repos (amber-thistle-issues-numbers): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL issues.list-open :: POST /api/v3/user/repos (amber-thistle-issues-list-open): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL issues.list-open-excludes-closed :: POST /api/v3/user/repos (amber-thistle-issues-list-closed): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL issues.list-sort-asc :: POST /api/v3/user/repos (amber-thistle-issues-sort-asc): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL issues.list-sort-desc :: POST /api/v3/user/repos (amber-thistle-issues-sort-desc): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL issues.list-shape :: POST /api/v3/user/repos (amber-thistle-issues-list-shape): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL issues.get-one :: POST /api/v3/user/repos (amber-thistle-issues-get-one): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL issues.patch-close :: POST /api/v3/user/repos (amber-thistle-issues-patch-close): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL issues.patch-close-persists :: POST /api/v3/user/repos (amber-thistle-issues-close-persists): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL issues.comment-create :: POST /api/v3/user/repos (amber-thistle-issues-comment-create): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL issues.comments-list :: POST /api/v3/user/repos (amber-thistle-issues-comments-list): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL issues.bad-label :: POST /api/v3/user/repos (amber-thistle-issues-bad-label): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL pulls.create :: POST /api/v3/user/repos (amber-thistle-pulls-create): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL pulls.create-body :: POST /api/v3/user/repos (amber-thistle-pulls-create-body): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL pulls.create-head-sha :: POST /api/v3/user/repos (amber-thistle-pulls-create-head): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL pulls.create-base-sha :: POST /api/v3/user/repos (amber-thistle-pulls-create-base): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL pulls.get-one :: POST /api/v3/user/repos (amber-thistle-pulls-get-one): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL pulls.files-list :: POST /api/v3/user/repos (amber-thistle-pulls-files-list): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL pulls.files-shape :: POST /api/v3/user/repos (amber-thistle-pulls-files-shape): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL pulls.files-multiple :: POST /api/v3/user/repos (amber-thistle-pulls-files-multiple): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL pulls.merge-status :: POST /api/v3/user/repos (amber-thistle-pulls-merge-status): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL pulls.merge-body :: POST /api/v3/user/repos (amber-thistle-pulls-merge-body): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL pulls.merge-closes :: POST /api/v3/user/repos (amber-thistle-pulls-merge-closes): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL pulls.merge-commit-on-default :: POST /api/v3/user/repos (amber-thistle-pulls-merge-on-default): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL pulls.merge-content-on-default :: POST /api/v3/user/repos (amber-thistle-pulls-merge-content): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL pulls.merge-commit-sha :: POST /api/v3/user/repos (amber-thistle-pulls-merge-commit-sha): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL pulls.merge-unknown :: POST /api/v3/user/repos (amber-thistle-pulls-merge-unknown): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL pulls.merge-conflict :: POST /api/v3/user/repos (amber-thistle-pulls-merge-conflict): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL pulls.list-state-all :: POST /api/v3/user/repos (amber-thistle-pulls-list-all): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL pulls.list-default-open :: POST /api/v3/user/repos (amber-thistle-pulls-list-open): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL pulls.list-shape :: POST /api/v3/user/repos (amber-thistle-pulls-list-shape): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL pulls.get-unknown :: POST /api/v3/user/repos (amber-thistle-pulls-get-unknown): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL protocol.content-type-json :: POST /api/v3/user/repos (amber-thistle-protocol-content-type): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL protocol.malformed-body-400 :: POST /api/v3/user/repos with the body {"name":: expected status 400, got 422 Unprocessable Entity; body {"message":"name is required"}
+FAIL protocol.request-id :: POST /api/v3/user/repos (amber-thistle-protocol-request-id): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL protocol.error-message :: POST /api/v3/user/repos (amber-thistle-protocol-error-message): expected status 201, got 422 Unprocessable Entity; body {"message":"Repository already exists"}
+FAIL graphql.repository-fields :: git fixture for the default branch main: threw GitProtocolError: invalid pkt-line length "vers"
+FAIL graphql.introspection-issue :: Issue: __type(name: "Issue").fields is empty
+FAIL graphql.introspection-types :: PullRequest: __type(name: "PullRequest").fields is empty
+FAIL graphql.issues-open-order :: the OPEN issue list is empty after the fixture created open issues
+FAIL graphql.issue-by-number :: data.repository.issue is undefined, expected #15
+FAIL graphql.close-issue :: issue #20's id is undefined, expected a non-empty string
+FAIL graphql.pull-requests-list :: git fixture for the default branch main: threw GitProtocolError: invalid pkt-line length "vers"
+FAIL graphql.pull-request-files :: git fixture for the default branch main: threw GitProtocolError: invalid pkt-line length "vers"
+FAIL graphql.create-pull-request :: git fixture for the default branch main: threw GitProtocolError: invalid pkt-line length "vers"
+FAIL graphql.merge-pull-request :: git fixture for the default branch main: threw GitProtocolError: invalid pkt-line length "vers"
+FAIL graphql.add-comment :: issue #21's id is undefined, expected a non-empty string
+FAIL graphql.invalid-field :: the response carries no errors array: the invalid field was not reported
+FAIL graphql.batched-operations :: the second batched operation answered an empty Issue fields list
+FAIL graphql.global-id-stability :: issue #15's id is undefined, expected a non-empty string
+FAIL graphql.issues-pagination :: data.repository.issues is undefined
+FAIL mcp.create-issue :: POST /api/v3/user/repos (mcp-6a09e667-issue-create) -> HTTP 422: Repository already exists
+FAIL mcp.list-issues :: POST /api/v3/user/repos (mcp-6a09e667-issue-list) -> HTTP 422: Repository already exists
+FAIL mcp.create-pull-request :: POST /api/v3/user/repos (mcp-6a09e667-pr-create) -> HTTP 422: Repository already exists
+FAIL mcp.merge-pull-request :: POST /api/v3/user/repos (mcp-6a09e667-pr-merge) -> HTTP 422: Repository already exists
+FAIL mcp.concurrent-calls :: POST /api/v3/user/repos (mcp-6a09e667-concurrent-left) -> HTTP 422: Repository already exists
+FAIL mcp.rest-parity :: tools/call create_repo -> JSON-RPC -32602: Repository already exists

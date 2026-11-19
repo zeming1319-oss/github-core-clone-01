@@ -1,0 +1,902 @@
+{
+ "seed": "6a09e667f3bcc909",
+ "viewer": {
+  "id": 1000,
+  "login": "adaiversen",
+  "name": "ada iversen",
+  "email": "adaiversen@example.invalid"
+ },
+ "teammate": {
+  "id": 1001,
+  "login": "quinnkeller",
+  "name": "quinn keller",
+  "email": "quinnkeller@example.invalid"
+ },
+ "stranger": {
+  "id": 1002,
+  "login": "olgabauer",
+  "name": "olga bauer",
+  "email": "olgabauer@example.invalid"
+ },
+ "org": "faint-meadow-org",
+ "users": [
+  "adaiversen",
+  "quinnkeller",
+  "olgabauer",
+  "dmitriquist",
+  "adanovak",
+  "zanerossi",
+  "pavelcosta",
+  "wrenkeller",
+  "coraquist",
+  "elenaulrich",
+  "tesssato",
+  "svenrossi"
+ ],
+ "repos": [
+  {
+   "name": "amber-thistle",
+   "private": false,
+   "description": "the tooling behind the thing",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "happy-willow",
+   "private": false,
+   "description": "a sandbox for the next idea",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "happy-ember",
+   "private": false,
+   "description": "fixtures, generators and the odd benchmark",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "crisp-thistle",
+   "private": true,
+   "description": "the parts that must not break",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "nimble-delta",
+   "private": false,
+   "description": "the parts that must not break",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "tidy-harbor",
+   "private": false,
+   "description": "a small service with a sharp edge",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "quiet-orchid",
+   "private": false,
+   "description": "what the prototype became",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "gentle-quartz",
+   "private": false,
+   "description": "fixtures, generators and the odd benchmark",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "happy-nebula",
+   "private": false,
+   "description": "what the prototype became",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "witty-thistle",
+   "private": false,
+   "description": "fixtures, generators and the odd benchmark",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "upbeat-yarrow",
+   "private": true,
+   "description": "what the prototype became",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "faint-falcon",
+   "private": false,
+   "description": "a small service with a sharp edge",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "quick-juniper",
+   "private": false,
+   "description": "the parts that must not break",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "tidy-umber",
+   "private": false,
+   "description": "notes and experiments, kept until they are not",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "eager-pebble",
+   "private": false,
+   "description": "fixtures, generators and the odd benchmark",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "warm-raven",
+   "private": false,
+   "description": "a sandbox for the next idea",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "idle-badger",
+   "private": false,
+   "description": "what the prototype became",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "calm-orchid",
+   "private": true,
+   "description": "a reference implementation, for reading",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "tidy-ember",
+   "private": false,
+   "description": "the tooling behind the thing",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "brisk-cedar",
+   "private": false,
+   "description": "what the prototype became",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "steady-meadow",
+   "private": false,
+   "description": "what the prototype became",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "idle-lantern",
+   "private": false,
+   "description": "the tooling behind the thing",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "quick-raven",
+   "private": false,
+   "description": "the tooling behind the thing",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "plain-cedar",
+   "private": false,
+   "description": "a small service with a sharp edge",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "calm-quartz",
+   "private": true,
+   "description": "the tooling behind the thing",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "tidy-lantern",
+   "private": false,
+   "description": "the tooling behind the thing",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "happy-thistle",
+   "private": false,
+   "description": "a sandbox for the next idea",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "crisp-zephyr",
+   "private": false,
+   "description": "the parts that must not break",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "keen-glade",
+   "private": false,
+   "description": "fixtures, generators and the odd benchmark",
+   "defaultBranch": "main"
+  },
+  {
+   "name": "amber-badger",
+   "private": false,
+   "description": "a small service with a sharp edge",
+   "defaultBranch": "main"
+  }
+ ],
+ "orgRepos": [
+  "quick-ember",
+  "mellow-comet",
+  "happy-kettle",
+  "amber-raven",
+  "brisk-glade",
+  "jolly-violet"
+ ],
+ "strangerRepos": [
+  "gentle-comet",
+  "faint-raven",
+  "upbeat-orchid"
+ ],
+ "labels": [
+  "bug",
+  "enhancement",
+  "documentation",
+  "question",
+  "good first issue",
+  "help wanted"
+ ],
+ "branches": [
+  "main",
+  "develop",
+  "release/1.0",
+  "docs/graphql-cursor-pagination",
+  "feature/issue-label-validation",
+  "feature/push-report-status-checks",
+  "fix/repo-pagination",
+  "perf/issue-label-validation",
+  "docs/repo-pagination",
+  "perf/conditional-requests-2",
+  "fix/shallow-fetch-support"
+ ],
+ "filePaths": [
+  "config/token.css",
+  "server.toml",
+  "examples/index.json",
+  "cli/render.json",
+  "schema.txt",
+  "client.json",
+  "examples/core/client.txt",
+  "client/store.ts",
+  "schema.html",
+  "config/lib/config.ts",
+  "scripts/response.txt",
+  "test/build/clock.css",
+  "scripts/client/response.sql",
+  "test/lib/format.md",
+  "scripts/config.ts",
+  "client.yml",
+  "index.yml",
+  "test/pkg/client.html",
+  "token.json",
+  "build/session.toml",
+  "session.yml",
+  "scripts/stream.yml",
+  "server/internal/store.json",
+  "build/token.ts",
+  "stream.toml",
+  "scripts/schema.html",
+  "web/parser.yml",
+  "build/scripts/validate.html",
+  "server/schema.js",
+  "router.ts",
+  "index.txt",
+  "validate.yml",
+  "build/format.ts",
+  "config/clock.css",
+  "session.css",
+  "data/format.css",
+  "2-session.css",
+  "assets/cache.json",
+  "lib/response.toml",
+  "tools/format.html",
+  "client.html",
+  "internal/queue.toml",
+  "clock.js",
+  "client.md",
+  "server/api/config.json",
+  "util/request.md",
+  "tools/session.toml",
+  "scripts/pkg/server.html",
+  "pkg/cache.toml",
+  "cli/assets/format.ts",
+  "event.html",
+  "client/examples/parser.css",
+  "scripts/util/stream.ts",
+  "format.sql",
+  "cli/parser.js",
+  "api/build/clock.html",
+  "server.md",
+  "lib/client.md",
+  "pkg/assets/index.js",
+  "internal/docs/session.sql"
+ ],
+ "blobLens": [
+  2023,
+  1349,
+  3282,
+  2682,
+  2051,
+  3730,
+  1138,
+  2636,
+  2658,
+  2153,
+  72,
+  3217,
+  220,
+  625,
+  3934,
+  1385,
+  2936,
+  2631,
+  4064,
+  136,
+  294,
+  2054,
+  585,
+  3563
+ ],
+ "blobHeads": [
+  "lichen\nkelp victor\nuniform india kilo oscar yankee quebec lichen kilo bravo\nfoxt",
+  "nickel\ncharlie\ngranite\nhotel granite amber drift xray delta romeo jasper basalt ",
+  "hollow yankee granite sierra mike papa hotel whiskey echo alpha lichen zulu lima",
+  "kelp basalt\nyankee oscar india granite papa cobalt echo moss moss papa cobalt de",
+  "mike quebec\nmike ember hollow\noscar jasper\noscar drift sierra mike\njuliet kilo c",
+  "ember delta romeo\nivory alpha lichen nickel\nxray bravo papa alpha golf papa delt",
+  "frost mike india basalt alpha oscar lima kelp yankee juliet hollow cobalt drift ",
+  "quebec xray romeo basalt\ntango whiskey victor moss juliet basalt basalt jasper e",
+  "ivory\nquebec kilo hotel papa november\nzulu romeo\njuliet\nvictor amber kilo\ndrift ",
+  "sierra kelp echo papa alpha sierra ember kelp\nhollow zulu sierra papa tango tang",
+  "whiskey uniform basalt romeo delta charlie drift\namber alpha\njasper brav",
+  "kelp frost lichen echo victor ivory zulu victor golf cobalt lichen kilo kilo ech",
+  "whiskey granite charlie echo uniform\nkilo nickel foxtrot\necho delta\nvictor\nromeo",
+  "uniform charlie november xray frost hollow papa victor charlie jasper\nkilo lima ",
+  "frost kilo bravo papa nickel papa victor granite xray kilo papa echo\nlichen mike",
+  "ivory juliet kelp granite oscar amber hollow ivory oscar alpha sierra lima mike ",
+  "kilo zulu whiskey quebec delta bravo cobalt\nkilo whiskey\nhotel oscar\npapa basalt",
+  "golf yankee papa\ngolf quebec echo\nsierra nickel echo cobalt moss\npapa drift delt",
+  "basalt zulu\nbasalt frost whiskey\njasper bravo golf\nyankee november lima victor b",
+  "victor lichen india ivory mike tango foxtrot cobalt whiskey echo\njuliet delta ja",
+  "hotel ember moss oscar uniform oscar yankee sierra amber frost drift tango frost",
+  "bravo moss victor charlie hotel drift sierra xray amber golf echo cobalt ember v",
+  "foxtrot foxtrot\ngolf papa yankee ivory moss nickel november papa bravo\ndelta yan",
+  "kilo bravo jasper golf romeo november foxtrot hollow yankee mike zulu lichen emb"
+ ],
+ "issues": [
+  {
+   "title": "Incorrect GraphQL node ids",
+   "body": "A minimal case is attached but the second request fails. The same flow works over the API and the server answers with a JSON error. Steps to reproduce are below but the second request fails.",
+   "labels": [
+    "bug"
+   ]
+  },
+  {
+   "title": "Stale push report-status",
+   "body": "The same flow works over the API and nothing is written to the log. The same flow works over the API and the status is wrong for the method. The same flow works over the API and nothing is written to the log.",
+   "labels": [
+    "question"
+   ]
+  },
+  {
+   "title": "Unclear clone over HTTP",
+   "body": "The expected behaviour is clear and the server answers with a JSON error. This showed up after the last change while the reply body stays empty. A minimal case is attached so the client gives up.",
+   "labels": []
+  },
+  {
+   "title": "Stale commit listing",
+   "body": "This showed up after the last change and the status is wrong for the method.",
+   "labels": []
+  },
+  {
+   "title": "Noisy merge button",
+   "body": "The expected behaviour is clear while the reply body stays empty. Steps to reproduce are below and the status is wrong for the method.",
+   "labels": []
+  },
+  {
+   "title": "Stale MCP tool list",
+   "body": "The expected behaviour is clear and the status is wrong for the method. Steps to reproduce are below so the client gives up. The same flow works over the API and the status is wrong for the method.",
+   "labels": [
+    "bug"
+   ]
+  },
+  {
+   "title": "Noisy tag listing",
+   "body": "The same flow works over the API and the status is wrong for the method. This showed up after the last change but the second request fails. Steps to reproduce are below and the server answers with a JSON error.",
+   "labels": [
+    "question"
+   ]
+  },
+  {
+   "title": "Confusing tag listing",
+   "body": "The expected behaviour is clear but the second request fails. The expected behaviour is clear and the server answers with a JSON error.",
+   "labels": [
+    "enhancement"
+   ]
+  },
+  {
+   "title": "Missing repo creation",
+   "body": "The same flow works over the API while the reply body stays empty. The expected behaviour is clear and nothing is written to the log. A minimal case is attached and the status is wrong for the method.",
+   "labels": [
+    "bug"
+   ]
+  },
+  {
+   "title": "Confusing MCP tool list",
+   "body": "A minimal case is attached and the server answers with a JSON error. This showed up after the last change while the reply body stays empty. The expected behaviour is clear and the server answers with a JSON error.",
+   "labels": []
+  },
+  {
+   "title": "Flaky tag listing",
+   "body": "This showed up after the last change so the client gives up.",
+   "labels": []
+  },
+  {
+   "title": "Missing commit listing",
+   "body": "A minimal case is attached and nothing is written to the log.",
+   "labels": [
+    "question"
+   ]
+  },
+  {
+   "title": "Unclear repo creation",
+   "body": "The same flow works over the API so the client gives up.",
+   "labels": []
+  },
+  {
+   "title": "Unexpected shallow fetch",
+   "body": "The same flow works over the API and the server answers with a JSON error. It works on a fresh repository so the client gives up.",
+   "labels": []
+  },
+  {
+   "title": "Missing branch deletion",
+   "body": "The expected behaviour is clear so the client gives up. The expected behaviour is clear and the status is wrong for the method. The expected behaviour is clear but the second request fails.",
+   "labels": [
+    "good first issue"
+   ]
+  },
+  {
+   "title": "Missing shallow fetch",
+   "body": "The expected behaviour is clear but the second request fails.",
+   "labels": [
+    "documentation"
+   ]
+  },
+  {
+   "title": "Confusing MCP tool list",
+   "body": "Steps to reproduce are below so the client gives up. The expected behaviour is clear so the client gives up. The same flow works over the API but the second request fails.",
+   "labels": []
+  },
+  {
+   "title": "Flaky issue pagination",
+   "body": "A minimal case is attached but the second request fails. The same flow works over the API and nothing is written to the log. The expected behaviour is clear and the server answers with a JSON error.",
+   "labels": []
+  },
+  {
+   "title": "Slow shallow fetch",
+   "body": "A minimal case is attached so the client gives up.",
+   "labels": []
+  },
+  {
+   "title": "Unclear merge button",
+   "body": "This showed up after the last change while the reply body stays empty.",
+   "labels": []
+  },
+  {
+   "title": "Noisy GraphQL node ids",
+   "body": "The same flow works over the API but the second request fails. A minimal case is attached but the second request fails. The same flow works over the API and nothing is written to the log.",
+   "labels": []
+  },
+  {
+   "title": "Broken merge button",
+   "body": "It works on a fresh repository and the status is wrong for the method.",
+   "labels": []
+  },
+  {
+   "title": "Incorrect clone over HTTP",
+   "body": "This showed up after the last change but the second request fails.",
+   "labels": [
+    "documentation"
+   ]
+  },
+  {
+   "title": "Slow clone over HTTP",
+   "body": "The same flow works over the API and the status is wrong for the method. A minimal case is attached while the reply body stays empty. Steps to reproduce are below and the status is wrong for the method.",
+   "labels": [
+    "documentation"
+   ]
+  },
+  {
+   "title": "Slow content update",
+   "body": "It works on a fresh repository and the status is wrong for the method. It works on a fresh repository and the status is wrong for the method.",
+   "labels": []
+  },
+  {
+   "title": "Broken push report-status",
+   "body": "It works on a fresh repository while the reply body stays empty. The same flow works over the API and the server answers with a JSON error. A minimal case is attached while the reply body stays empty.",
+   "labels": []
+  },
+  {
+   "title": "Missing tag listing",
+   "body": "A minimal case is attached while the reply body stays empty. The expected behaviour is clear and the server answers with a JSON error. It works on a fresh repository and the server answers with a JSON error.",
+   "labels": [
+    "question"
+   ]
+  },
+  {
+   "title": "Missing commit listing",
+   "body": "This showed up after the last change and the server answers with a JSON error. The expected behaviour is clear while the reply body stays empty.",
+   "labels": []
+  },
+  {
+   "title": "Stale merge button",
+   "body": "It works on a fresh repository and nothing is written to the log. The expected behaviour is clear while the reply body stays empty.",
+   "labels": []
+  },
+  {
+   "title": "Slow GraphQL node ids",
+   "body": "The same flow works over the API and the server answers with a JSON error. A minimal case is attached but the second request fails.",
+   "labels": [
+    "good first issue"
+   ]
+  },
+  {
+   "title": "Flaky commit listing",
+   "body": "Steps to reproduce are below while the reply body stays empty. The same flow works over the API so the client gives up. It works on a fresh repository while the reply body stays empty.",
+   "labels": []
+  },
+  {
+   "title": "Stale clone over HTTP",
+   "body": "It works on a fresh repository while the reply body stays empty. This showed up after the last change while the reply body stays empty. This showed up after the last change while the reply body stays empty.",
+   "labels": [
+    "good first issue"
+   ]
+  },
+  {
+   "title": "Unclear GraphQL node ids",
+   "body": "This showed up after the last change so the client gives up. This showed up after the last change so the client gives up.",
+   "labels": []
+  },
+  {
+   "title": "Incorrect GraphQL node ids",
+   "body": "This showed up after the last change but the second request fails. It works on a fresh repository and the status is wrong for the method.",
+   "labels": [
+    "bug"
+   ]
+  },
+  {
+   "title": "Unexpected commit listing",
+   "body": "The same flow works over the API and nothing is written to the log. It works on a fresh repository so the client gives up.",
+   "labels": [
+    "bug"
+   ]
+  },
+  {
+   "title": "Noisy repo creation",
+   "body": "The expected behaviour is clear and the status is wrong for the method. A minimal case is attached so the client gives up. The same flow works over the API and nothing is written to the log.",
+   "labels": [
+    "documentation"
+   ]
+  },
+  {
+   "title": "Broken push report-status",
+   "body": "It works on a fresh repository and the status is wrong for the method. This showed up after the last change but the second request fails. A minimal case is attached but the second request fails.",
+   "labels": []
+  },
+  {
+   "title": "Noisy content update",
+   "body": "Steps to reproduce are below but the second request fails. Steps to reproduce are below so the client gives up.",
+   "labels": [
+    "bug"
+   ]
+  },
+  {
+   "title": "Incorrect tag listing",
+   "body": "The same flow works over the API but the second request fails. The same flow works over the API and the status is wrong for the method.",
+   "labels": []
+  },
+  {
+   "title": "Missing push report-status",
+   "body": "This showed up after the last change and the status is wrong for the method. It works on a fresh repository so the client gives up.",
+   "labels": []
+  },
+  {
+   "title": "Broken commit listing",
+   "body": "A minimal case is attached but the second request fails.",
+   "labels": []
+  },
+  {
+   "title": "Noisy content update",
+   "body": "It works on a fresh repository and the status is wrong for the method. Steps to reproduce are below and the server answers with a JSON error.",
+   "labels": []
+  },
+  {
+   "title": "Slow GraphQL node ids",
+   "body": "Steps to reproduce are below and nothing is written to the log. A minimal case is attached and the server answers with a JSON error.",
+   "labels": [
+    "good first issue"
+   ]
+  },
+  {
+   "title": "Missing push report-status",
+   "body": "The expected behaviour is clear and nothing is written to the log. It works on a fresh repository and the server answers with a JSON error. A minimal case is attached and nothing is written to the log.",
+   "labels": []
+  },
+  {
+   "title": "Unexpected branch deletion",
+   "body": "A minimal case is attached but the second request fails. It works on a fresh repository but the second request fails. A minimal case is attached and the status is wrong for the method.",
+   "labels": [
+    "bug"
+   ]
+  },
+  {
+   "title": "Flaky issue pagination",
+   "body": "The same flow works over the API and the server answers with a JSON error.",
+   "labels": [
+    "documentation"
+   ]
+  },
+  {
+   "title": "Flaky content update",
+   "body": "The same flow works over the API and the server answers with a JSON error. The same flow works over the API and the status is wrong for the method.",
+   "labels": []
+  },
+  {
+   "title": "Noisy branch deletion",
+   "body": "The same flow works over the API but the second request fails. The expected behaviour is clear while the reply body stays empty. Steps to reproduce are below and the server answers with a JSON error.",
+   "labels": [
+    "good first issue"
+   ]
+  },
+  {
+   "title": "Unexpected branch deletion",
+   "body": "It works on a fresh repository and the status is wrong for the method. This showed up after the last change but the second request fails. It works on a fresh repository so the client gives up.",
+   "labels": []
+  },
+  {
+   "title": "Confusing clone over HTTP",
+   "body": "A minimal case is attached and nothing is written to the log.",
+   "labels": [
+    "documentation"
+   ]
+  },
+  {
+   "title": "Stale MCP tool list",
+   "body": "This showed up after the last change but the second request fails.",
+   "labels": [
+    "enhancement"
+   ]
+  },
+  {
+   "title": "Broken clone over HTTP",
+   "body": "Steps to reproduce are below and the status is wrong for the method.",
+   "labels": []
+  },
+  {
+   "title": "Incorrect push report-status",
+   "body": "The same flow works over the API but the second request fails. The expected behaviour is clear and the status is wrong for the method. Steps to reproduce are below and the status is wrong for the method.",
+   "labels": []
+  },
+  {
+   "title": "Confusing merge button",
+   "body": "Steps to reproduce are below so the client gives up.",
+   "labels": []
+  },
+  {
+   "title": "Unexpected GraphQL node ids",
+   "body": "The expected behaviour is clear but the second request fails. The same flow works over the API but the second request fails.",
+   "labels": []
+  },
+  {
+   "title": "Slow repo creation",
+   "body": "It works on a fresh repository and the status is wrong for the method. The expected behaviour is clear and nothing is written to the log.",
+   "labels": [
+    "help wanted"
+   ]
+  },
+  {
+   "title": "Slow branch deletion",
+   "body": "This showed up after the last change and the status is wrong for the method. Steps to reproduce are below so the client gives up. This showed up after the last change while the reply body stays empty.",
+   "labels": []
+  },
+  {
+   "title": "Slow tag listing",
+   "body": "This showed up after the last change but the second request fails. It works on a fresh repository and the server answers with a JSON error.",
+   "labels": []
+  },
+  {
+   "title": "Slow content update",
+   "body": "It works on a fresh repository and nothing is written to the log.",
+   "labels": []
+  },
+  {
+   "title": "Incorrect push report-status",
+   "body": "It works on a fresh repository while the reply body stays empty. This showed up after the last change so the client gives up.",
+   "labels": [
+    "documentation"
+   ]
+  }
+ ],
+ "pulls": [
+  {
+   "title": "Improve MCP tool schemas",
+   "body": "It works on a fresh repository and the status is wrong for the method.",
+   "head": "chore/mcp-tool-schemas",
+   "base": "main"
+  },
+  {
+   "title": "Simplify MCP tool schemas",
+   "body": "The same flow works over the API while the reply body stays empty.",
+   "head": "chore/conditional-requests",
+   "base": "main"
+  },
+  {
+   "title": "Harden branch protection stubs",
+   "body": "This showed up after the last change and nothing is written to the log.",
+   "head": "feature/repo-pagination",
+   "base": "main"
+  },
+  {
+   "title": "Simplify repo pagination",
+   "body": "A minimal case is attached and nothing is written to the log.",
+   "head": "fix/issue-label-validation",
+   "base": "main"
+  },
+  {
+   "title": "Improve GraphQL cursor pagination",
+   "body": "It works on a fresh repository but the second request fails.",
+   "head": "chore/push-report-status-checks",
+   "base": "main"
+  },
+  {
+   "title": "Simplify branch protection stubs",
+   "body": "The same flow works over the API and the status is wrong for the method. Steps to reproduce are below and the server answers with a JSON error. The expected behaviour is clear and the status is wrong for the method.",
+   "head": "fix/merge-conflict-detection",
+   "base": "main"
+  },
+  {
+   "title": "Refactor issue label validation",
+   "body": "A minimal case is attached so the client gives up. This showed up after the last change and the server answers with a JSON error.",
+   "head": "docs/issue-label-validation",
+   "base": "main"
+  },
+  {
+   "title": "Document branch protection stubs",
+   "body": "This showed up after the last change and the server answers with a JSON error. Steps to reproduce are below and nothing is written to the log. This showed up after the last change so the client gives up.",
+   "head": "fix/shallow-fetch-support",
+   "base": "main"
+  },
+  {
+   "title": "Simplify conditional requests",
+   "body": "Steps to reproduce are below so the client gives up. A minimal case is attached and the status is wrong for the method.",
+   "head": "docs/merge-conflict-detection",
+   "base": "main"
+  },
+  {
+   "title": "Fix conditional requests",
+   "body": "Steps to reproduce are below but the second request fails.",
+   "head": "fix/push-report-status-checks",
+   "base": "main"
+  },
+  {
+   "title": "Add MCP tool schemas",
+   "body": "The same flow works over the API and the status is wrong for the method. The expected behaviour is clear but the second request fails. It works on a fresh repository while the reply body stays empty.",
+   "head": "chore/mcp-tool-schemas",
+   "base": "main"
+  },
+  {
+   "title": "Simplify conditional requests",
+   "body": "It works on a fresh repository while the reply body stays empty.",
+   "head": "perf/shallow-fetch-support",
+   "base": "main"
+  },
+  {
+   "title": "Fix packfile delta reuse",
+   "body": "A minimal case is attached and nothing is written to the log. The same flow works over the API but the second request fails.",
+   "head": "chore/packfile-delta-reuse",
+   "base": "main"
+  },
+  {
+   "title": "Refactor GraphQL cursor pagination",
+   "body": "It works on a fresh repository while the reply body stays empty.",
+   "head": "chore/branch-protection-stubs",
+   "base": "main"
+  },
+  {
+   "title": "Simplify GraphQL cursor pagination",
+   "body": "Steps to reproduce are below and the status is wrong for the method. The same flow works over the API and nothing is written to the log.",
+   "head": "chore/branch-protection-stubs",
+   "base": "main"
+  },
+  {
+   "title": "Fix GraphQL cursor pagination",
+   "body": "A minimal case is attached so the client gives up. Steps to reproduce are below and the status is wrong for the method.",
+   "head": "chore/issue-label-validation",
+   "base": "main"
+  },
+  {
+   "title": "Simplify GraphQL cursor pagination",
+   "body": "The same flow works over the API while the reply body stays empty. Steps to reproduce are below and nothing is written to the log.",
+   "head": "feature/mcp-tool-schemas",
+   "base": "main"
+  },
+  {
+   "title": "Fix MCP tool schemas",
+   "body": "The same flow works over the API and the server answers with a JSON error. This showed up after the last change so the client gives up. A minimal case is attached and nothing is written to the log.",
+   "head": "chore/branch-protection-stubs",
+   "base": "main"
+  },
+  {
+   "title": "Refactor merge conflict detection",
+   "body": "The same flow works over the API and nothing is written to the log. A minimal case is attached and the status is wrong for the method. The expected behaviour is clear but the second request fails.",
+   "head": "feature/shallow-fetch-support",
+   "base": "main"
+  },
+  {
+   "title": "Simplify packfile delta reuse",
+   "body": "Steps to reproduce are below and nothing is written to the log.",
+   "head": "chore/graphql-cursor-pagination",
+   "base": "main"
+  },
+  {
+   "title": "Simplify merge conflict detection",
+   "body": "The expected behaviour is clear and the status is wrong for the method. It works on a fresh repository while the reply body stays empty. This showed up after the last change so the client gives up.",
+   "head": "chore/repo-pagination",
+   "base": "main"
+  },
+  {
+   "title": "Refactor conditional requests",
+   "body": "Steps to reproduce are below so the client gives up. The same flow works over the API but the second request fails.",
+   "head": "fix/branch-protection-stubs",
+   "base": "main"
+  },
+  {
+   "title": "Speed up issue label validation",
+   "body": "The same flow works over the API and nothing is written to the log. The expected behaviour is clear so the client gives up. Steps to reproduce are below and nothing is written to the log.",
+   "head": "docs/packfile-delta-reuse",
+   "base": "main"
+  },
+  {
+   "title": "Improve repo pagination",
+   "body": "This showed up after the last change so the client gives up. The same flow works over the API but the second request fails. This showed up after the last change and the server answers with a JSON error.",
+   "head": "fix/conditional-requests",
+   "base": "main"
+  },
+  {
+   "title": "Refactor merge conflict detection",
+   "body": "The same flow works over the API so the client gives up. Steps to reproduce are below and the server answers with a JSON error.",
+   "head": "feature/graphql-cursor-pagination",
+   "base": "main"
+  },
+  {
+   "title": "Fix branch protection stubs",
+   "body": "The expected behaviour is clear so the client gives up. This showed up after the last change and nothing is written to the log. A minimal case is attached and the status is wrong for the method.",
+   "head": "docs/shallow-fetch-support",
+   "base": "main"
+  },
+  {
+   "title": "Simplify GraphQL cursor pagination",
+   "body": "The expected behaviour is clear while the reply body stays empty. Steps to reproduce are below so the client gives up.",
+   "head": "docs/graphql-cursor-pagination",
+   "base": "main"
+  },
+  {
+   "title": "Simplify push report status checks",
+   "body": "The expected behaviour is clear and nothing is written to the log.",
+   "head": "chore/issue-label-validation",
+   "base": "main"
+  },
+  {
+   "title": "Refactor push report status checks",
+   "body": "Steps to reproduce are below but the second request fails. Steps to reproduce are below and the server answers with a JSON error. This showed up after the last change and the server answers with a JSON error.",
+   "head": "feature/branch-protection-stubs",
+   "base": "main"
+  },
+  {
+   "title": "Harden repo pagination",
+   "body": "Steps to reproduce are below and nothing is written to the log. A minimal case is attached but the second request fails. It works on a fresh repository and the status is wrong for the method.",
+   "head": "fix/conditional-requests",
+   "base": "main"
+  }
+ ]
+}

@@ -1,0 +1,120 @@
+git.advertise-v2	5000	protocol v2 capability advertisement is served and well formed
+git.advertise-receive-pack	5000	receive-pack serves a v0 ref advertisement with push capabilities
+git.advertise-headers	5000	info/refs answers the smart-HTTP content type and preamble
+git.unknown-repo-404	5000	a missing repository advertises 404 and the server stays up
+git.ls-refs	8000	v2 ls-refs reports refs, HEAD symref and peeled tags
+git.ls-refs-prefix	8000	v2 ls-refs honours ref-prefix filtering
+git.clone-empty	8000	a repository with no refs clones as an empty repository
+git.push-first-commit	8000	a first commit pushes to an unborn branch and becomes the tip
+git.clone-object-hashes	12000	a full clone verifies object-for-object
+git.clone-blob-bytes	12000	every cloned blob equals the pushed bytes
+git.clone-tree-entries	12000	cloned trees round-trip paths, modes and nested directories
+git.clone-commit-bytes	12000	commit objects round-trip byte-exactly with their metadata
+git.clone-annotated-tag	10000	an annotated tag object round-trips and peels to its commit
+git.fetch-incremental	12000	an incremental fetch sends only the new objects and advances the tip
+git.fetch-nothing-new	10000	a fetch with the tip already held transfers no objects
+git.fetch-shallow-depth1	12000	a depth-1 shallow clone lands the tip only
+git.fetch-shallow-deepen	12000	deepen 2 extends a shallow clone by exactly one generation
+git.fetch-shallow-new-tip	12000	a shallow fetch of a new tip does not pull the old history
+git.push-update-ref	10000	a fast-forward update moves a branch and clones see it
+git.push-create-branch	10000	creating a branch from an existing commit is reported and advertised
+git.push-delete-branch	10000	deleting a branch is reported and removes the ref
+git.push-non-fast-forward	10000	a non-fast-forward update is refused per-ref and changes nothing
+git.push-mixed-report	12000	one command list reports ok and ng per ref, and applies only the ok one
+git.push-delete-tag	10000	deleting a tag ref is reported and removes the ref
+git.push-100-files	15000	a 100-file single-commit push round-trips byte-exactly
+git.pack-integrity	12000	a fetched pack is structurally valid and checksummed
+git.pack-deltas	15000	delta-compressed objects resolve correctly (when the server sends them)
+git.sideband-framing	12000	the fetch packfile section is valid sideband framing
+git.push-sideband-report	12000	the push report arrives in valid sideband frames
+git.repo-survives-errors	15000	the server stays healthy through 404s, refusals and a malformed request
+repos.pagination		GET /user/repos pages 30 seeded repos at per_page=10 through Link rel="next"
+repos.root		GET /api/v3/ answers 200 JSON with X-OAuth-Scopes
+repos.meta		GET /api/v3/meta reports installed_version
+repos.create		POST /user/repos creates and GET round-trips name, private and default_branch
+repos.not-found		GET a missing repository is a JSON 404
+repos.patch		PATCH /repos/{o}/{r} updates the description
+repos.delete		DELETE /repos/{o}/{r} deletes it and a later GET is 404
+repos.branches		GET /branches lists a branch created through POST /git/refs
+repos.commits		GET /commits reflects a commit made on a branch and not the default branch
+repos.unauthorized		a request without a token is 401
+repos.foreign-token		the same repository name under another owner is a 404 for this token
+repos.contents-create		PUT /contents creates a file with a commit; GET returns base64 content and sha
+repos.contents-directory		GET /contents on a directory lists its entries
+repos.contents-stale-sha		PUT /contents with a stale sha is 409
+repos.contents-delete		DELETE /contents removes the file with a commit and GET is 404
+issues.create		POST /issues creates a 201 open issue with a number
+issues.create-title-body		POST /issues echoes the title and body
+issues.create-labels		POST /issues attaches an existing label
+issues.numbers-increment		issue numbers increment by one
+issues.list-open		GET /issues?state=open lists the open issue
+issues.list-open-excludes-closed		GET /issues?state=open omits a closed issue
+issues.list-sort-asc		GET /issues?sort=created&direction=asc orders by creation
+issues.list-sort-desc		GET /issues?sort=created&direction=desc reverses it
+issues.list-shape		GET /issues returns the GitHub issue shape
+issues.get-one		GET /issues/{n} returns the issue
+issues.patch-close		PATCH /issues/{n} closes it
+issues.patch-close-persists		the close survives a later GET
+issues.comment-create		POST /issues/{n}/comments creates a comment
+issues.comments-list		GET /issues/{n}/comments lists the comment
+issues.bad-label		POST /issues with an unknown label is 422
+pulls.create		POST /pulls creates an open pull request from a head branch
+pulls.create-body		POST /pulls echoes the title and body
+pulls.create-head-sha		the pull head.sha is the head branch tip
+pulls.create-base-sha		the pull base.sha is the base branch tip
+pulls.get-one		GET /pulls/{n} returns the pull request
+pulls.files-list		GET /pulls/{n}/files lists the changed path
+pulls.files-shape		pull files carry filename, status and the change counts
+pulls.files-multiple		GET /pulls/{n}/files lists every changed path
+pulls.merge-status		PUT /pulls/{n}/merge with merge_method=squash is 200
+pulls.merge-body		the merge reply is {merged:true, sha, message}
+pulls.merge-closes		the merged pull is closed, merged and carries merged_at
+pulls.merge-commit-on-default		the merge commit appears on the default branch
+pulls.merge-content-on-default		the squash content is on the default branch
+pulls.merge-commit-sha		the pull reports merge_commit_sha equal to the merge sha
+pulls.merge-unknown		merging an unknown pull request is 404
+pulls.merge-conflict		merging a conflicted pull request is 405
+pulls.list-state-all		GET /pulls?state=all lists open and merged pull requests
+pulls.list-default-open		GET /pulls defaults to open pull requests
+pulls.list-shape		GET /pulls returns the GitHub pull-request shape
+pulls.get-unknown		GET an unknown pull request is 404
+protocol.content-type-json		every REST reply is application/json, never HTML
+protocol.unknown-route-json-404		an unknown /api/v3 route is a JSON 404
+protocol.malformed-body-400		a malformed JSON body is a 400
+protocol.request-id		every reply carries a non-empty X-GitHub-Request-Id
+protocol.error-message		401, 404 and 422 bodies carry a string message
+graphql.viewer-login	8000	query { viewer { login } } answers the token owner
+graphql.repository-fields	10000	repository(owner:, name:) answers id, databaseId, name, owner, defaultBranchRef, viewerPermission and hasIssuesEnabled
+graphql.introspection-issue	8000	__type(name: "Issue") lists the fields gh feature-detects
+graphql.introspection-types	10000	__type lists PullRequest, Repository and SearchType (gh's other probes, one check)
+graphql.issues-open-order	12000	issues(first: 10, states: [OPEN], orderBy: CREATED_AT DESC) filters and orders
+graphql.issue-by-number	10000	issue(number:) reads one issue
+graphql.create-issue	12000	createIssue creates an issue the REST view sees
+graphql.close-issue	12000	closeIssue closes an issue the REST view shows closed
+graphql.pull-requests-list	15000	pullRequests(first: 5) lists number, headRefName, baseRefName, mergeable and state
+graphql.pull-request-files	12000	pullRequest(number:).files lists the changed paths
+graphql.create-pull-request	15000	createPullRequest creates a pull request
+graphql.merge-pull-request	15000	mergePullRequest SQUASH merges and the REST view shows merged: true
+graphql.add-comment	12000	addComment writes an issue comment the REST view lists
+graphql.invalid-field	8000	an invalid field is a 200 with an errors array
+graphql.unauthenticated	8000	an unauthenticated query is a 401
+graphql.node-repository	10000	node(id:) round-trips a repository
+graphql.unknown-repository	8000	an unknown repository reads data.repository = null with no errors
+graphql.batched-operations	10000	two operation documents in one body answer in order
+graphql.global-id-stability	12000	global ids are opaque and equal on repeated reads
+graphql.issues-pagination	12000	issues(first, after) pages by cursor to the end
+mcp.initialize		initialize: serverInfo.name/version and capabilities.tools, over whichever era the server negotiates
+mcp.server-discover		server/discover: a DiscoverResult with supportedVersions, or the pre-discover era
+mcp.tools-list		tools/list: at least six tools, all six required ones present by name or obvious alias
+mcp.tool-schemas		every tool has a non-empty description and an inputSchema of type object
+mcp.create-issue		tools/call create_issue creates an issue the REST surface lists
+mcp.list-issues		tools/call list_issues returns an issue the repository holds
+mcp.create-pull-request		tools/call create_pull_request opens a pull request REST reads back with the same head and base
+mcp.merge-pull-request		tools/call merge_pull_request merges; REST reads merged:true
+mcp.unknown-tool		an unknown tool name answers JSON-RPC -32602 or -32601, never HTTP 500
+mcp.parse-error		a body that is not JSON answers HTTP 400 with JSON-RPC -32700
+mcp.missing-arguments		tools/call with missing required arguments answers isError:true or JSON-RPC -32602
+mcp.concurrent-calls		two concurrent tool calls answer under their own ids and their own objects
+mcp.tools-list-idempotent		two tools/list answers hold the same tools array, byte for byte
+mcp.rest-parity		a repository and an issue created over MCP are the same objects over REST, ids stable
+mcp.auth-required		a tools/call with no Authorization header answers HTTP 401

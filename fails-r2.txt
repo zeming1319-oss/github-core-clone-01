@@ -1,0 +1,122 @@
+FAIL git.advertise-v2 :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.advertise-receive-pack :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.advertise-headers :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.unknown-repo-404 :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.ls-refs :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.ls-refs-prefix :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.clone-empty :: invalid pkt-line length "PACK" [pktline-header]
+FAIL git.push-first-commit :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.clone-object-hashes :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.clone-blob-bytes :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.clone-tree-entries :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.clone-commit-bytes :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.clone-annotated-tag :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.fetch-incremental :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.fetch-nothing-new :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.fetch-shallow-depth1 :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.fetch-shallow-deepen :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.fetch-shallow-new-tip :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.push-update-ref :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.push-create-branch :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.push-delete-branch :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.push-non-fast-forward :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.push-mixed-report :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.push-delete-tag :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.push-100-files :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.pack-integrity :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.pack-deltas :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.sideband-framing :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.push-sideband-report :: invalid pkt-line length "unpa" [pktline-header]
+FAIL git.repo-survives-errors :: invalid pkt-line length "unpa" [pktline-header]
+PASS repos.pagination :: GET /user/repos pages 30 seeded repos at per_page=10 through Link rel="next": ok
+PASS repos.root :: GET /api/v3/ answers 200 JSON with X-OAuth-Scopes: ok
+PASS repos.meta :: GET /api/v3/meta reports installed_version: ok
+PASS repos.create :: POST /user/repos creates and GET round-trips name, private and default_branch: ok
+PASS repos.not-found :: GET a missing repository is a JSON 404: ok
+PASS repos.patch :: PATCH /repos/{o}/{r} updates the description: ok
+PASS repos.delete :: DELETE /repos/{o}/{r} deletes it and a later GET is 404: ok
+PASS repos.branches :: GET /branches lists a branch created through POST /git/refs: ok
+FAIL repos.commits :: GET /api/v3/repos/adaiversen/amber-thistle-repos-commits/commits?sha=develop-commits: does not list the commit e9c292fbf5f1c36f4e8207597f79c48c6326fa5d created on develop-commits
+PASS repos.unauthorized :: a request without a token is 401: ok
+PASS repos.foreign-token :: the same repository name under another owner is a 404 for this token: ok
+FAIL repos.contents-create :: GET /api/v3/repos/adaiversen/amber-thistle-repos-contents-create/contents/config/token-created.css: content does not decode to the committed bytes
+FAIL repos.contents-directory :: GET /api/v3/repos/adaiversen/amber-thistle-repos-contents-dir/contents/config body: expected array, got object
+FAIL repos.contents-stale-sha :: PUT /api/v3/repos/adaiversen/amber-thistle-repos-contents-stale/contents/config/token.css (update): expected status 200 or 201, got 409 Conflict; body {"message":"sha mismatch"}
+FAIL repos.contents-delete :: GET /api/v3/repos/adaiversen/amber-thistle-repos-contents-delete/contents/config/token.css after DELETE: expected status 404, got 200 OK; body {"name":"token.css","path":"config/token.css","sha":"2bbd041797d9e61585cafcae0868d6c5686418b8","size":53,"url":"http://127.0.0.1:18081/api/v3/repos/adaiversen/amber-thistle-repos-contents-delete/contents/config/token.css","html_url":"http:/…
+FAIL issues.create :: POST /api/v3/repos/adaiversen/amber-thistle-issues-create/labels (bug): expected status 201, got 404 Not Found; body {"message":"Not Found"}
+FAIL issues.create-title-body :: POST /api/v3/repos/adaiversen/amber-thistle-issues-create-echo/labels (bug): expected status 201, got 404 Not Found; body {"message":"Not Found"}
+FAIL issues.create-labels :: POST /api/v3/repos/adaiversen/amber-thistle-issues-create-labels/labels (bug): expected status 201, got 404 Not Found; body {"message":"Not Found"}
+FAIL issues.numbers-increment :: POST /api/v3/repos/adaiversen/amber-thistle-issues-numbers/labels (bug): expected status 201, got 404 Not Found; body {"message":"Not Found"}
+FAIL issues.list-open :: POST /api/v3/repos/adaiversen/amber-thistle-issues-list-open/labels (bug): expected status 201, got 404 Not Found; body {"message":"Not Found"}
+FAIL issues.list-open-excludes-closed :: POST /api/v3/repos/adaiversen/amber-thistle-issues-list-closed/labels (bug): expected status 201, got 404 Not Found; body {"message":"Not Found"}
+FAIL issues.list-sort-asc :: POST /api/v3/repos/adaiversen/amber-thistle-issues-sort-asc/labels (bug): expected status 201, got 404 Not Found; body {"message":"Not Found"}
+FAIL issues.list-sort-desc :: POST /api/v3/repos/adaiversen/amber-thistle-issues-sort-desc/labels (bug): expected status 201, got 404 Not Found; body {"message":"Not Found"}
+FAIL issues.list-shape :: POST /api/v3/repos/adaiversen/amber-thistle-issues-list-shape/labels (bug): expected status 201, got 404 Not Found; body {"message":"Not Found"}
+FAIL issues.get-one :: POST /api/v3/repos/adaiversen/amber-thistle-issues-get-one/labels (bug): expected status 201, got 404 Not Found; body {"message":"Not Found"}
+FAIL issues.patch-close :: POST /api/v3/repos/adaiversen/amber-thistle-issues-patch-close/labels (bug): expected status 201, got 404 Not Found; body {"message":"Not Found"}
+FAIL issues.patch-close-persists :: POST /api/v3/repos/adaiversen/amber-thistle-issues-close-persists/labels (bug): expected status 201, got 404 Not Found; body {"message":"Not Found"}
+FAIL issues.comment-create :: POST /api/v3/repos/adaiversen/amber-thistle-issues-comment-create/labels (bug): expected status 201, got 404 Not Found; body {"message":"Not Found"}
+FAIL issues.comments-list :: POST /api/v3/repos/adaiversen/amber-thistle-issues-comments-list/labels (bug): expected status 201, got 404 Not Found; body {"message":"Not Found"}
+FAIL issues.bad-label :: POST /api/v3/repos/adaiversen/amber-thistle-issues-bad-label/labels (bug): expected status 201, got 404 Not Found; body {"message":"Not Found"}
+PASS pulls.create :: POST /pulls creates an open pull request from a head branch: ok
+PASS pulls.create-body :: POST /pulls echoes the title and body: ok
+FAIL pulls.create-head-sha :: GET /api/v3/repos/adaiversen/amber-thistle-pulls-create-head/pulls/1: body.head.sha is "03bec1a739d953eb44744c6b7ca078bbc33eebae", expected the head branch tip "f1b3d996573de093e5b132eb25fb2026ac4f553c"
+FAIL pulls.create-base-sha :: GET /api/v3/repos/adaiversen/amber-thistle-pulls-create-base/pulls/1: body.base.sha is "0000000000000000000000000000000000000000", expected the base tip "52c6ae5d3df01bb06fb4dd6bacc7394f174b811c"
+PASS pulls.get-one :: GET /pulls/{n} returns the pull request: ok
+FAIL pulls.files-list :: GET /api/v3/repos/adaiversen/amber-thistle-pulls-files-list/pulls/1/files does not list "config/token-pulls-files-list.css"
+PASS pulls.files-shape :: pull files carry filename, status and the change counts: ok
+FAIL pulls.files-multiple :: GET /api/v3/repos/adaiversen/amber-thistle-pulls-files-multiple/pulls/1/files lists ["README.md"], expected "config/token-multi-a.css"
+PASS pulls.merge-status :: PUT /pulls/{n}/merge with merge_method=squash is 200: ok
+PASS pulls.merge-body :: the merge reply is {merged:true, sha, message}: ok
+PASS pulls.merge-closes :: the merged pull is closed, merged and carries merged_at: ok
+FAIL pulls.merge-commit-on-default :: GET /api/v3/repos/adaiversen/amber-thistle-pulls-merge-on-default/commits?sha=main: does not list the merge commit 02b5d34c74fcdb0d27331a2a07ee5eebb5a7cef4
+FAIL pulls.merge-content-on-default :: GET contents/config/token-pulls-merge-content.css?ref=main: content does not decode to the merged bytes
+PASS pulls.merge-commit-sha :: the pull reports merge_commit_sha equal to the merge sha: ok
+PASS pulls.merge-unknown :: merging an unknown pull request is 404: ok
+FAIL pulls.merge-conflict :: PUT /api/v3/repos/adaiversen/amber-thistle-pulls-merge-conflict/contents/config/token.css?branch=develop-conflict-a: expected status 200 or 201, got 409 Conflict; body {"message":"sha mismatch"}
+PASS pulls.list-state-all :: GET /pulls?state=all lists open and merged pull requests: ok
+PASS pulls.list-default-open :: GET /pulls defaults to open pull requests: ok
+PASS pulls.list-shape :: GET /pulls returns the GitHub pull-request shape: ok
+PASS pulls.get-unknown :: GET an unknown pull request is 404: ok
+PASS protocol.content-type-json :: every REST reply is application/json, never HTML: ok
+PASS protocol.unknown-route-json-404 :: an unknown /api/v3 route is a JSON 404: ok
+FAIL protocol.malformed-body-400 :: POST /api/v3/user/repos with the body {"name":: expected status 400, got 422 Unprocessable Entity; body {"message":"name is required"}
+PASS protocol.request-id :: every reply carries a non-empty X-GitHub-Request-Id: ok
+FAIL protocol.error-message :: POST /api/v3/repos/adaiversen/amber-thistle-protocol-error-message-issues/labels (bug): expected status 201, got 404 Not Found; body {"message":"Not Found"}
+PASS graphql.viewer-login :: viewer.login is adaiversen
+FAIL graphql.repository-fields :: git fixture for the default branch main: threw GitProtocolError: invalid pkt-line length "PACK"
+FAIL graphql.introspection-issue :: Issue: __type(name: "Issue").fields is empty
+FAIL graphql.introspection-types :: PullRequest: __type(name: "PullRequest").fields is empty
+FAIL graphql.issues-open-order :: the OPEN issue list is empty after the fixture created open issues
+FAIL graphql.issue-by-number :: data.repository.issue is undefined, expected #1
+PASS graphql.create-issue :: createIssue made #5 and the REST view reads it open with the same title
+FAIL graphql.close-issue :: issue #6's id is undefined, expected a non-empty string
+FAIL graphql.pull-requests-list :: git fixture for the default branch main: threw GitProtocolError: invalid pkt-line length "PACK"
+FAIL graphql.pull-request-files :: git fixture for the default branch main: threw GitProtocolError: invalid pkt-line length "PACK"
+FAIL graphql.create-pull-request :: git fixture for the default branch main: threw GitProtocolError: invalid pkt-line length "PACK"
+FAIL graphql.merge-pull-request :: git fixture for the default branch main: threw GitProtocolError: invalid pkt-line length "PACK"
+FAIL graphql.add-comment :: issue #7's id is undefined, expected a non-empty string
+FAIL graphql.invalid-field :: the response carries no errors array: the invalid field was not reported
+PASS graphql.unauthenticated :: an unauthenticated POST /api/graphql is 401
+PASS graphql.node-repository :: node(id:) round-trips repository adaiversen/amber-thistle-graphql
+PASS graphql.unknown-repository :: data.repository is null for "amber-thistle-graphql-missing" with no errors
+FAIL graphql.batched-operations :: the second batched operation answered an empty Issue fields list
+FAIL graphql.global-id-stability :: issue #1's id is undefined, expected a non-empty string
+FAIL graphql.issues-pagination :: data.repository.issues is undefined
+PASS mcp.initialize :: initialize: gitforge-v2 1.0.0, protocol 2025-11-25, tools capability present
+PASS mcp.server-discover :: pre-discover revision (HTTP 200, JSON-RPC -32601; the server answers initialize)
+PASS mcp.tools-list :: 6 tools; all six present: create_repo->create_repo, get_repo->get_repo, create_issue->create_issue, list_issues->list_issues, create_pull_request->create_pull_request, merge_pull_request->merge_pull_request
+PASS mcp.tool-schemas :: all 6 tools have a description and an object inputSchema
+PASS mcp.create-issue :: created issue #1 over MCP; REST lists it with the same title
+PASS mcp.list-issues :: list_issues returned issue #1 (by title)
+PASS mcp.create-pull-request :: pull request #1 created over MCP; REST reads mcp-head-6a09e667-pr-create into main, state open
+PASS mcp.merge-pull-request :: pull request #1 merged over MCP; REST reads merged:true, state closed
+PASS mcp.unknown-tool :: HTTP 200, JSON-RPC -32602: Unknown tool: mcp_no_such_tool_6a09e667
+PASS mcp.parse-error :: HTTP 400, JSON-RPC -32700 parse error
+PASS mcp.missing-arguments :: isError:true
+PASS mcp.concurrent-calls :: two concurrent tools/call answers kept their ids (concurrent-left-6a09e667, concurrent-right-6a09e667) and their own repositories
+PASS mcp.tools-list-idempotent :: 6 tools, byte-identical over two calls
+PASS mcp.rest-parity :: repo adaiversen/mcp-6a09e667-parity id 5089 and issue #1 id 1 are the same objects over MCP and REST, stable across reads
+PASS mcp.auth-required :: unauthenticated tools/call -> HTTP 401
+
+TOTAL 46/120
