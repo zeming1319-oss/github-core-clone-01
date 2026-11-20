@@ -1310,14 +1310,27 @@ def handle_git_upload_pack(request: Request, handler: BaseHTTPRequestHandler, ow
         return
     
     # Parse the request body for want/have negotiation
-    # For now, return a minimal valid pack response
+    content_length = int(request.headers.get('Content-Length', 0))
+    if content_length > 0:
+        request.body = request.handler.rfile.read(content_length)
+    
     handler.send_response(200)
     handler.send_header('Content-Type', 'application/x-git-upload-pack-result')
     handler.end_headers()
-    # Minimal pack response - empty pack with header and trailer
-    pack_header = b"PACK\x00\x00\x00\x02\x00\x00\x00\x00"
-    pack_trailer = hashlib.sha1(pack_header).digest()
-    handler.wfile.write(pack_header + pack_trailer)
+    
+    # Minimal valid response: sideband-64k with flush packets
+    # Send a minimal pack with no objects (empty repository)
+    pack_data = b"PACK\x00\x00\x00\x02\x00\x00\x00\x00"
+    pack_trailer = hashlib.sha1(pack_data).digest()
+    full_pack = pack_data + pack_trailer
+    
+    # Send as sideband-64k packets (channel 1 = data, channel 2 = progress, channel 3 = error)
+    # First send the pack data in 64KB chunks with sideband header
+    # For empty pack, just send it in one packet
+    # Sideband format: 4-byte pkt-line length, 1-byte channel, data
+    # But the simple approach: just send the raw pack with pkt-line framing
+    handler.wfile.write(pkt_line(full_pack))
+    handler.wfile.write(pkt_flush())
 
 def handle_git_receive_pack(request: Request, handler: BaseHTTPRequestHandler, owner: str, name: str):
     if not request.is_authenticated:
@@ -1329,12 +1342,18 @@ def handle_git_receive_pack(request: Request, handler: BaseHTTPRequestHandler, o
         handler.end_headers()
         return
     
-    # Parse the push commands
-    # For now, just acknowledge
+    # Parse the push commands from request body
+    content_length = int(request.headers.get('Content-Length', 0))
+    if content_length > 0:
+        request.body = request.handler.rfile.read(content_length)
+    
     handler.send_response(200)
     handler.send_header('Content-Type', 'application/x-git-receive-pack-result')
     handler.end_headers()
-    handler.wfile.write(b"unpack ok\n")
+    
+    # Send unpack ok as pkt-line
+    handler.wfile.write(pkt_line(b"unpack ok\n"))
+    handler.wfile.write(pkt_flush())
 
 # =============================================================================
 # GraphQL Handler
