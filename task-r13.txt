@@ -1,0 +1,27 @@
+Round 13 (in /workspace/makefun/gitforge-v2). Current score 63/120 (see fails-latest.txt).
+
+TOP PRIORITY — git smart HTTP is fully stubbed (30 git checks + 8 GraphQL checks fail because of it). Implement it for real:
+
+1. git-upload-pack: implement the REAL protocol.
+   - Protocol v2: capabilities advertisement (_pkt_line("version 2\n")), command=ls-refs (peel, symrefs, ref-prefix args) and command=fetch (want/have negotiation, respond with acks: "acknowledgments" section with ACK lines for haves, then "ready"/"NAK", on done send "packfile" section as sideband-64k framed pack).
+   - Protocol v0: parse want/have pkt-lines from request body (after optional shallow lines), NAK/ACK negotiation, on "done" walk commits reachable from wants minus those reachable from haves, and emit a REAL packfile.
+   - Packfile generation: "PACK" + version 2 + object count; per object a type/size varint header (types: commit=1, tree=2, blob=3, tag=4), then zlib-deflated content; trailer = SHA-1 of all preceding pack bytes. Object IDs are sha1("<type> <len>\0" + data).
+   - Shallow: support shallow-depth/deepen in fetch (v2) and shallow lines (v0): truncate the commit walk at depth, emit "shallow <sha>" lines; unshallow when client has the parent.
+   - Framing: when the client requests sideband-64k, wrap the pack stream in sideband packets (channel 1 data, channel 2 progress, channel 3 error) and end with flush pkt. Annotated tags must be included when a ref points to a tag object (peeled ^{} too).
+   - The check suite uses real `git clone/fetch/push` and verifies blob bytes, tree entries, commit bytes, annotated tags, incremental fetch, fetch-nothing-new, shallow depth-1/deepen — the pack must be complete and correct, including exactly matching object bytes.
+
+2. git-receive-pack: parse v0 push requests.
+   - Body: command pkt-lines "old-sha SP new-sha SP refname" until flush-pkt (or a shallow/deepen-after stuff — ignore extra sections), then a packfile.
+   - Parse the incoming pack fully: header, each object (full zlib objects, OFS_DELTA and REF_DELTA — implement delta application: base size varint, result size varint, copy/insert opcodes). Objects may arrive in any order; resolve refs to earlier objects in the same pack. Write every object into the repo's object store, then update refs per the commands.
+   - Verify connectivity enough for the checks; verify old-sha matches current ref value (non-fast-forward / stale old-sha -> "ng <ref> ..." per command), new-sha all zeros = delete ref.
+   - Respond: pkt-line "unpack ok" (or "unpack <reason>"), then per command "ok <ref>" or "ng <ref> <reason>", then flush. If client sent report-status/sideband capabilities, wrap report in sideband when requested (sideband-64k channel 1). Pushes include: first commit, update ref, create branch, delete branch/tag, non-fast-forward rejection, mixed ok/ng report, 100-file push, delta packs, sideband report, and repo must survive bad pushes.
+
+3. quick non-git fixes if time permits:
+   - repos.contents: GET directory path must return a JSON array of entries; PUT with correct sha must succeed 200/201 (409 only for stale sha); DELETE must actually delete (subsequent GET 404); created content must decode to the committed bytes (base64 round-trip).
+   - repos.commits: listing for ?sha=<branch> must include that branch's tip commit (and its history).
+   - pulls: response head.sha/base.sha must be the real branch tip SHAs; GET /pulls/1/files must list all changed files between base and head with correct filenames; merge must create a real merge commit visible in commits?sha=main listing with merged content; conflicting merges should fail without corrupting the branch; PUT-contents conflict on the branch must behave (409 for stale sha, ok for right sha).
+   - graphql: introspection __type(name:"Issue"/"PullRequest").fields must be non-empty; issues(state:OPEN) must list created issues with correct ordering, repository.issue(number:) must resolve, issue id must be non-empty; repository.pullRequests list and their files.
+
+Workflow: kill any old `python3 main.py` first, then `python3 main.py --port 18081 &`, then run
+`node --experimental-strip-types --no-warnings .kit-ref/run_checks.mts http://127.0.0.1:18081 devtoken > checks-latest.txt`
+and check the TOTAL line. Iterate (edit, restart server, re-run driver) until TOTAL is as high as possible, target >= 100/120. Prioritize git smart HTTP — it unblocks ~38 checks. When done: `git add -A && git commit -m "round 13: <score>/120"`.

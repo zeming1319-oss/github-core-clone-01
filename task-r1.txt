@@ -1,0 +1,21 @@
+你在 /workspace/makefun/gitforge-v2 中工作。这是一个 GitHub 克隆服务（Python stdlib，main.py 启动 HTTP 服务器），当前检查 63/120。目标是修复最大的失败簇：git smart HTTP 协议（约 30 个失败）。
+
+失败的完整清单与原因见 fails-latest.txt（只看 FAIL 行）。检查脚本在 .kit-ref/run_checks.mts（只读参考）。
+
+失败详情（当前跑出的真实结果）：
+- git.advertise-v2 / advertise-receive-pack / advertise-headers：POST /<owner>/<repo>.git/git-receive-pack 超时——服务器对这些端点根本没实现或挂死。
+- git.unknown-repo-404：未知仓库的 git 端点应返回 404，而不是超时。
+- git.ls-refs / ls-refs-prefix：upload-pack v2 的 ls-refs 命令（含 ref-prefix 过滤）。
+- git.clone-empty / clone-object-hashes / clone-blob-bytes / clone-tree-entries / clone-commit-bytes / clone-annotated-tag：git clone 全流程，需要真正的 upload-pack（v2）响应：acknowledged capabilities、fetch 命令、packfile 生成（obj struct：blob/tree/commit/tag 全类型，pack 头、SHA-1 尾、可选 delta）。
+- git.fetch-incremental / fetch-nothing-new / fetch-shallow-depth1 / fetch-shallow-deepen / fetch-shallow-new-tip：增量 fetch、have/want 协商、shallow 支持（shallow-info / deepen）。
+- git.push-first-commit / push-update-ref / push-create-branch / push-delete-branch / push-non-fast-forward / push-mixed-report / push-delete-tag / push-100-files / repo-survives-errors：receive-pack v0：解析 pkt-line 命令列表（old-sha new-sha ref 逐条，含 0000...0 删除）、解析客户端 packfile（完整 pack 解析器：对象类型、zlib inflate、delta ofs/ref 解压）、更新 refs、生成 unpack ok / ng <ref> <reason> 报告（sideband band 1 可选）。non-fast-forward 要拒绝并报 ng。push 后 REST 读取要一致。
+- git.pack-integrity / pack-deltas：pack 解析要支持 delta 对象（OFS_DELTA/REF_DELTA）。
+- git.sideband-framing / push-sideband-report：side-band-64k 分帧（band 0 progress 忽略 / band 1 pack / band 3 error），回应报告走 sideband 时按 65524 字节分帧。
+
+参考实现（120/120 满分版）在 /workspace/makefun/gitforge，只准看、不准拷贝文件——用它理解协议格式与检查预期，代码要自己写进 gitforge-v2。可 git log/diff 参考版理解演进。也可用真 git 客户端（git clone/push http://127.0.0.1:18081/... devtoken...）实际调试。
+
+服务器：cd /workspace/makefun/gitforge-v2 && python3 main.py --port 18081（后台跑），测试用 curl/python 客户端或真 git。改完后必须自己重启服务器并跑一次：
+node --experimental-strip-types --no-warnings .kit-ref/run_checks.mts http://127.0.0.1:18081 devtoken > fails.txt 2>&1
+确认 git.* 失败显著减少且不破坏已 PASS 的项（尤其 mcp.*、graphql 部分、api.* 全部要保持通过）。git 簇全修好预计 +30 分。
+
+不要动 docs/README 以外无关文件；不要伪造检查结果；TOTAL 行必须在检查输出里。完成后打印修改文件清单和最终 TOTAL。

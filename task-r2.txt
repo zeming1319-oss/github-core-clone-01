@@ -1,0 +1,25 @@
+你在 /workspace/makefun/gitforge-v2 中工作（Python stdlib GitHub 克隆服务器，main.py）。git smart HTTP 已有骨架：/git-receive-pack 和 /git-upload-pack 的 POST handler 在 main.py 约 1757-1810 行（handle_git_upload_pack / handle_git_receive_pack），GET info/refs 广告已实现。但 handler 目前只回最小假响应，检查仍有 ~30 个 git.* 失败。
+
+本轮目标（按优先级，时间不够先做第 1 项）：
+
+1. 真正的 receive-pack（push）：
+   - 解析请求体（request.body 已含全部字节）：v0 pkt-line 命令行 "old-sha new-sha refname\0caps"，直到 flush；随后是客户端 packfile（PACK 头、N 个对象、SHA-1 尾）。
+   - 实现 pack 解析器：按类型（1 commit,2 tree,3 blob,6 ofs-delta,7 ref-delta）逐对象解析，zlib.decompress，delta 应用（copy/insert 指令）得到最终对象；校验每个对象 SHA-1。把对象存进 repo 的对象存储（参考 repo 已有结构，看 STORE 怎么存 blob/tree/commit；REST PUT contents 创建的对象也在里面）。
+   - 按命令更新 STORE.git_refs（0-sha 新建分支/tag、40 个 0 为删除、其余为 fast-forward 更新；non-fast-forward：old 不是 new 祖先时拒绝）。
+   - 回复 report-status：pkt-line "unpack ok\n"（或 "unpack <reason>\n"），每条命令一行 "ok <ref>\n" 或 "ng <ref> <reason>\n"（如 "ng refs/heads/x non-fast-forward"），然后 flush。若客户端声明 side-band-64k capability（从命令行 caps 解析），报告要走 band 1（每条 pkt 加 0x01 前缀），错误走 band 3，分帧 ≤65519 字节 payload。
+   - push 时会先发一个 'report-status' / 'side-band-64k' 等 caps。
+
+2. 真正的 upload-pack（clone/fetch）：
+   - v2（Git-Protocol: version=2 的 POST）：解析 command=ls-refs / command=fetch。ls-refs：按 peel/symrefs/ref-prefix 输出 "<oid> <refname>[ peeled^{}]\n" + "symref-target:..." 行，flush 结尾。fetch：解析 want/have/done，生成 pack：计算客户端没有的对象集合（want 减 have 及其祖先），序列化 commit/tree/blob（可含 ofs-delta），pack 头 PACK+版本+对象数，每对象 type+size varint 头+ zlib 数据，尾 SHA-1。shallow：支持 deepen/shallow 文件语义（depth 1 只给顶层 commit，响应里 shallow-info/shallow 行）。
+   - v0 POST：解析 want 行（首个 want 后的 caps）+ have 协商，"done" 后生成 pack。空仓库：只回 flush。
+   - clone/fetch 的对象要能被真 git 解析（object hashes/bytes/tree entries/commit bytes/annotated tag 各检查会解开验证）。
+
+3. 报告 framing：side-band-64k 时 pack 数据按 band 1 分帧，最大 pkt payload 65519。
+
+参考（只看不抄）：/workspace/makefun/gitforge 的 main.py 是 120/120 满分实现，重点看它的 upload-pack/receive-pack/pack 编解码函数与 STORE 对象存储结构。检查脚本 .kit-ref/checks-git.ts 与 .kit-ref/git-client.ts 定义了精确预期（超时/解析细节），务必对照阅读。用真 git 调试：git clone / git push http://127.0.0.1:18081/... （Bearer devtoken，用 git -c http.extraHeader）。
+
+服务器：先杀掉占用 18081 的进程再 python3 main.py --port 18081 后台启动（注意不要两次绑定；request.body 在 Request.__init__ 已经读过一次 body，handler 里绝不要再从 handler.rfile 读，会永久阻塞）。
+
+改完后重启服务器并跑：
+node --experimental-strip-types --no-warnings .kit-ref/run_checks.mts http://127.0.0.1:18081 devtoken > fails2.txt 2>&1
+git.* 失败应大幅减少且 mcp.*/api.*/graphql 已 PASS 项不得退步。最后打印修改文件与最终 TOTAL。

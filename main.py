@@ -12,10 +12,12 @@ import json
 import os
 import re
 import signal
+import struct
 import sys
 import threading
 import time
 import uuid
+import zlib
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -48,6 +50,430 @@ def pkt_line(data: bytes) -> bytes:
 def pkt_flush() -> bytes:
     """Return a flush packet (0000)."""
     return b"0000"
+
+def parse_pkt_lines(data: bytes) -> list[bytes]:
+    """Parse pkt-lines from data, returning list of payloads (without length prefix)."""
+    result = []
+    i = 0
+    while i < len(data):
+        if i + 4 > len(data):
+            break
+        length_hex = data[i:i+4]
+        try:
+            length = int(length_hex, 16)
+        except ValueError:
+            break
+        if length == 0:
+            result.append(b"")  # flush packet
+            i += 4
+            continue
+        if length < 4 or i + length > len(data):
+            break
+        payload = data[i+4:i+length]
+        result.append(payload)
+        i += length
+    return result
+
+def parse_pkt_line_stream(data: bytes) -> list[bytes]:
+    """Parse pkt-lines until flush packet, return payloads."""
+    result = []
+    i = 0
+    while i < len(data):
+        if i + 4 > len(data):
+            break
+        length_hex = data[i:i+4]
+        try:
+            length = int(length_hex, 16)
+        except ValueError:
+            break
+        if length == 0:
+            i += 4
+            break
+        if length < 4 or i + length > len(data):
+            break
+        payload = data[i+4:i+length]
+        result.append(payload)
+        i += length
+    return result
+
+# =============================================================================
+# Git Object Model
+# =============================================================================
+
+GIT_OBJECT_TYPES = {
+    b'commit': 1,
+    b'tree': 2,
+    b'blob': 3,
+    b'tag': 4,
+}
+
+GIT_TYPE_BY_NUM = {v: k for k, v in GIT_OBJECT_TYPES.items()}
+
+def git_object_header(obj_type: bytes, size: int) -> bytes:
+    """Create Git object header: 'type size\0'"""
+    return obj_type + b' ' + str(size).encode() + b'\0'
+
+def git_hash(data: bytes) -> str:
+    """Compute SHA-1 hash of Git object data."""
+    return hashlib.sha1(data).hexdigest()
+
+def git_hash_bytes(data: bytes) -> bytes:
+    """Compute SHA-1 hash of Git object data as bytes."""
+    return hashlib.sha1(data).digest()
+
+def encode_varint(n: int) -> bytes:
+    """Encode integer as varint (MSB continuation)."""
+    if n == 0:
+        return b'\x00'
+    result = []
+    while n > 0:
+        result.append(n & 0x7f)
+        n >>= 7
+    # Reverse and set MSB on all but last
+    result = result[::-1]
+    for i in range(len(result) - 1):
+        result[i] |= 0x80
+    return bytes(result)
+
+def decode_varint(data: bytes, offset: int = 0) -> tuple[int, int]:
+    """Decode varint from data starting at offset. Returns (value, new_offset)."""
+    result = 0
+    i = offset
+    while i < len(data):
+        b = data[i]
+        result = (result << 7) | (b & 0x7f)
+        i += 1
+        if not (b & 0x80):
+            break
+    return result, i
+
+class GitObject:
+    def __init__(self, obj_type: bytes, data: bytes):
+        self.type = obj_type
+        self.data = data
+        self.size = len(data)
+        self.header = git_object_header(obj_type, self.size)
+        self.full_data = self.header + self.data
+        self.sha = git_hash(self.full_data)
+        self.sha_bytes = git_hash_bytes(self.full_data)
+    
+    @classmethod
+    def from_full_data(cls, full_data: bytes):
+        """Parse object from full data (header + content)."""
+        # Find null byte
+        null_idx = full_data.find(b'\0')
+        if null_idx == -1:
+            raise ValueError("Invalid object format: no null terminator")
+        header = full_data[:null_idx]
+        data = full_data[null_idx + 1:]
+        parts = header.split(b' ', 1)
+        if len(parts) != 2:
+            raise ValueError("Invalid object header")
+        obj_type, size_str = parts
+        size = int(size_str)
+        if len(data) != size:
+            raise ValueError(f"Size mismatch: expected {size}, got {len(data)}")
+        return cls(obj_type, data)
+    
+    def serialize(self) -> bytes:
+        return self.full_data
+
+class Blob(GitObject):
+    def __init__(self, content: bytes):
+        super().__init__(b'blob', content)
+
+class TreeEntry:
+    def __init__(self, mode: bytes, name: bytes, sha: bytes):
+        self.mode = mode  # e.g., b'100644', b'040000'
+        self.name = name
+        self.sha = sha  # 20 bytes binary
+    
+    def serialize(self) -> bytes:
+        return self.mode + b' ' + self.name + b'\0' + self.sha
+
+class Tree(GitObject):
+    def __init__(self, entries: list[TreeEntry]):
+        data = b''.join(e.serialize() for e in entries)
+        super().__init__(b'tree', data)
+    
+    @classmethod
+    def parse(cls, data: bytes):
+        entries = []
+        i = 0
+        while i < len(data):
+            # Find space (mode end)
+            space_idx = data.find(b' ', i)
+            if space_idx == -1:
+                break
+            mode = data[i:space_idx]
+            # Find null (name end)
+            null_idx = data.find(b'\0', space_idx + 1)
+            if null_idx == -1:
+                break
+            name = data[space_idx + 1:null_idx]
+            # SHA is 20 bytes
+            sha = data[null_idx + 1:null_idx + 21]
+            if len(sha) != 20:
+                break
+            entries.append(TreeEntry(mode, name, sha))
+            i = null_idx + 21
+        return cls(entries)
+
+class Commit(GitObject):
+    def __init__(self, tree_sha: str, parent_shas: list[str], author: str, committer: str, message: str):
+        lines = [f"tree {tree_sha}"]
+        for p in parent_shas:
+            lines.append(f"parent {p}")
+        lines.append(f"author {author}")
+        lines.append(f"committer {committer}")
+        lines.append("")
+        lines.append(message)
+        data = "\n".join(lines).encode()
+        super().__init__(b'commit', data)
+        self.tree_sha = tree_sha
+        self.parent_shas = parent_shas
+    
+    @classmethod
+    def parse(cls, data: bytes):
+        lines = data.decode().split('\n')
+        tree_sha = ""
+        parent_shas = []
+        author = ""
+        committer = ""
+        message = ""
+        in_message = False
+        for line in lines:
+            if line.startswith("tree "):
+                tree_sha = line[5:]
+            elif line.startswith("parent "):
+                parent_shas.append(line[7:])
+            elif line.startswith("author "):
+                author = line[7:]
+            elif line.startswith("committer "):
+                committer = line[10:]
+            elif line == "":
+                in_message = True
+            elif in_message:
+                message += line + "\n"
+        message = message.rstrip('\n')
+        return cls(tree_sha, parent_shas, author, committer, message)
+
+class Tag(GitObject):
+    def __init__(self, object_sha: str, object_type: str, tag_name: str, tagger: str, message: str):
+        lines = [
+            f"object {object_sha}",
+            f"type {object_type}",
+            f"tag {tag_name}",
+            f"tagger {tagger}",
+            "",
+            message,
+        ]
+        data = "\n".join(lines).encode()
+        super().__init__(b'tag', data)
+
+# =============================================================================
+# Packfile Handling
+# =============================================================================
+
+PACK_VERSION = 2
+
+def build_pack_header(num_objects: int) -> bytes:
+    return b"PACK" + struct.pack(">I", PACK_VERSION) + struct.pack(">I", num_objects)
+
+def parse_pack_header(data: bytes) -> tuple[int, int, int]:
+    """Parse pack header, return (version, num_objects, header_size)."""
+    if len(data) < 12 or data[:4] != b"PACK":
+        raise ValueError("Invalid pack header")
+    version = struct.unpack(">I", data[4:8])[0]
+    num_objects = struct.unpack(">I", data[8:12])[0]
+    return version, num_objects, 12
+
+# Pack object types in packfile
+OBJ_COMMIT = 1
+OBJ_TREE = 2
+OBJ_BLOB = 3
+OBJ_TAG = 4
+OBJ_OFS_DELTA = 6
+OBJ_REF_DELTA = 7
+
+def encode_pack_object_header(obj_type: int, size: int) -> bytes:
+    """Encode pack object header: (type << 4) | (size & 0xf) with varint continuation."""
+    first_byte = (obj_type << 4) | (size & 0x0f)
+    size >>= 4
+    result = [first_byte]
+    while size > 0:
+        result.append((size & 0x7f) | 0x80)
+        size >>= 7
+    # Clear MSB on last byte
+    if len(result) > 1:
+        result[-1] &= 0x7f
+    return bytes(result)
+
+def decode_pack_object_header(data: bytes, offset: int) -> tuple[int, int, int]:
+    """Decode pack object header. Returns (obj_type, size, new_offset)."""
+    first = data[offset]
+    obj_type = (first >> 4) & 0x0f
+    size = first & 0x0f
+    shift = 4
+    offset += 1
+    while offset < len(data):
+        b = data[offset]
+        offset += 1
+        size |= (b & 0x7f) << shift
+        if not (b & 0x80):
+            break
+        shift += 7
+    return obj_type, size, offset
+
+import struct
+import zlib
+
+def build_packfile(objects: list[GitObject], use_deltas: bool = False) -> bytes:
+    """Build a packfile from a list of GitObjects."""
+    header = build_pack_header(len(objects))
+    pack_data = header
+    for obj in objects:
+        obj_type_num = GIT_OBJECT_TYPES.get(obj.type, OBJ_BLOB)
+        compressed = zlib.compress(obj.full_data)
+        pack_data += encode_pack_object_header(obj_type_num, len(obj.full_data))
+        pack_data += compressed
+    # Trailer: SHA-1 of all preceding pack data
+    trailer = hashlib.sha1(pack_data).digest()
+    return pack_data + trailer
+
+def parse_packfile(data: bytes) -> list[GitObject]:
+    """Parse a packfile and return list of GitObjects."""
+    version, num_objects, offset = parse_pack_header(data)
+    objects = []
+    ref_deltas = {}  # sha -> (obj_type, size, compressed_data)
+    
+    for _ in range(num_objects):
+        if offset >= len(data) - 20:  # Need at least trailer
+            break
+        obj_type, size, offset = decode_pack_object_header(data, offset)
+        
+        if obj_type == OBJ_REF_DELTA:
+            # REF_DELTA: 20-byte base SHA, then delta data
+            base_sha = data[offset:offset+20].hex()
+            offset += 20
+            delta_data = data[offset:]
+            # Find end of zlib stream
+            decomp = zlib.decompressobj()
+            try:
+                decomp.decompress(delta_data)
+                unused = decomp.unused_data
+                compressed_len = len(delta_data) - len(unused)
+                delta_compressed = delta_data[:compressed_len]
+                offset += compressed_len
+                ref_deltas[base_sha] = (obj_type, size, delta_compressed)
+            except zlib.error:
+                # Try to find valid zlib boundary
+                for end in range(1, len(delta_data) + 1):
+                    try:
+                        zlib.decompress(delta_data[:end])
+                        ref_deltas[base_sha] = (obj_type, size, delta_data[:end])
+                        offset += end
+                        break
+                    except zlib.error:
+                        continue
+        elif obj_type == OBJ_OFS_DELTA:
+            # OFS_DELTA: varint offset, then delta data
+            ofs, offset = decode_varint(data, offset)
+            delta_data = data[offset:]
+            decomp = zlib.decompressobj()
+            try:
+                decomp.decompress(delta_data)
+                unused = decomp.unused_data
+                compressed_len = len(delta_data) - len(unused)
+                delta_compressed = delta_data[:compressed_len]
+                offset += compressed_len
+                # Store offset for later resolution
+                ref_deltas[f"ofs:{ofs}"] = (obj_type, size, delta_compressed, ofs)
+            except zlib.error:
+                for end in range(1, len(delta_data) + 1):
+                    try:
+                        zlib.decompress(delta_data[:end])
+                        ref_deltas[f"ofs:{ofs}"] = (obj_type, size, delta_compressed, ofs)
+                        offset += end
+                        break
+                    except zlib.error:
+                        continue
+        else:
+            # Full object
+            compressed_data = data[offset:]
+            decomp = zlib.decompressobj()
+            try:
+                decomp.decompress(compressed_data)
+                unused = decomp.unused_data
+                compressed_len = len(compressed_data) - len(unused)
+                obj_compressed = compressed_data[:compressed_len]
+                offset += compressed_len
+                obj_data = zlib.decompress(obj_compressed)
+                obj = GitObject.from_full_data(obj_data)
+                objects.append(obj)
+            except zlib.error:
+                for end in range(1, len(compressed_data) + 1):
+                    try:
+                        obj_data = zlib.decompress(compressed_data[:end])
+                        obj = GitObject.from_full_data(obj_data)
+                        objects.append(obj)
+                        offset += end
+                        break
+                    except zlib.error:
+                        continue
+    
+    # Resolve deltas (simplified - for now just store them)
+    # Full delta resolution would require base objects to be available
+    return objects
+
+def apply_delta(base_data: bytes, delta_data: bytes) -> bytes:
+    """Apply a Git delta to base data."""
+    # Parse delta header: base size varint, result size varint
+    offset = 0
+    base_size, offset = decode_varint(delta_data, offset)
+    result_size, offset = decode_varint(delta_data, offset)
+    
+    if base_size != len(base_data):
+        raise ValueError(f"Base size mismatch: expected {base_size}, got {len(base_data)}")
+    
+    result = bytearray()
+    while offset < len(delta_data):
+        cmd = delta_data[offset]
+        offset += 1
+        if cmd & 0x80:
+            # Copy command
+            copy_offset = 0
+            copy_size = 0
+            if cmd & 0x01:
+                copy_offset |= delta_data[offset]
+                offset += 1
+            if cmd & 0x02:
+                copy_offset |= delta_data[offset] << 8
+                offset += 1
+            if cmd & 0x04:
+                copy_offset |= delta_data[offset] << 16
+                offset += 1
+            if cmd & 0x08:
+                copy_offset |= delta_data[offset] << 24
+                offset += 1
+            if cmd & 0x10:
+                copy_size |= delta_data[offset]
+                offset += 1
+            if cmd & 0x20:
+                copy_size |= delta_data[offset] << 8
+                offset += 1
+            if cmd & 0x40:
+                copy_size |= delta_data[offset] << 16
+                offset += 1
+            if copy_size == 0:
+                copy_size = 0x10000
+            result.extend(base_data[copy_offset:copy_offset + copy_size])
+        else:
+            # Insert command
+            insert_size = cmd
+            result.extend(delta_data[offset:offset + insert_size])
+            offset += insert_size
+    return bytes(result)
 
 # =============================================================================
 # Data Models
@@ -292,6 +718,35 @@ class Store:
             self.git_objects[repo.full_name] = {}
             self.labels[repo.full_name] = []
             self.label_counter[repo.full_name] = 1
+
+    def add_git_object(self, full_name: str, obj: GitObject):
+        with self._lock:
+            if full_name not in self.git_objects:
+                self.git_objects[full_name] = {}
+            self.git_objects[full_name][obj.sha] = obj
+    
+    def get_git_object(self, full_name: str, sha: str) -> Optional[GitObject]:
+        with self._lock:
+            return self.git_objects.get(full_name, {}).get(sha)
+    
+    def has_git_object(self, full_name: str, sha: str) -> bool:
+        with self._lock:
+            return sha in self.git_objects.get(full_name, {})
+    
+    def get_ref(self, full_name: str, ref: str) -> Optional[str]:
+        with self._lock:
+            return self.git_refs.get(full_name, {}).get(ref)
+    
+    def set_ref(self, full_name: str, ref: str, sha: str):
+        with self._lock:
+            if full_name not in self.git_refs:
+                self.git_refs[full_name] = {}
+            self.git_refs[full_name][ref] = sha
+    
+    def delete_ref(self, full_name: str, ref: str):
+        with self._lock:
+            if full_name in self.git_refs and ref in self.git_refs[full_name]:
+                del self.git_refs[full_name][ref]
 
     def get_user_for_token(self, token: str) -> User:
         return VIEWER
@@ -1311,9 +1766,7 @@ def handle_git_upload_pack(request: Request, handler: BaseHTTPRequestHandler, ow
     
     # Parse the request body for want/have negotiation
     content_length = int(request.headers.get('Content-Length', 0))
-    if content_length > 0:
-        request.body = request.handler.rfile.read(content_length)
-    
+
     handler.send_response(200)
     handler.send_header('Content-Type', 'application/x-git-upload-pack-result')
     handler.end_headers()
@@ -1344,9 +1797,6 @@ def handle_git_receive_pack(request: Request, handler: BaseHTTPRequestHandler, o
     
     # Parse the push commands from request body
     content_length = int(request.headers.get('Content-Length', 0))
-    if content_length > 0:
-        request.body = request.handler.rfile.read(content_length)
-    
     handler.send_response(200)
     handler.send_header('Content-Type', 'application/x-git-receive-pack-result')
     handler.end_headers()
